@@ -31,6 +31,7 @@ Apparently even on Ubuntu 16, PHP 7.0 is the provided version so manual install 
 sudo apt-get install gcc libxml2-dev unzip wget curl make openssl libssl-dev
 ```
 
+
 ## Step 1: Install Argon2 from PHC release on Github repository
 
 ```
@@ -43,7 +44,8 @@ make test
 sudo make install
 ```
 
-## Step 2: Install PHP7.2 from source with Argon2 option enabled
+
+## Step 2: Install PHP7.2 from sources with Argon2 option enabled
 
 ```
 wget http://de2.php.net/get/php-7.2.3.tar.gz/from/this/mirror
@@ -58,11 +60,13 @@ make test
 sudo make install
 ```
 
+
 ## Step 3: Create a utility functions
 
-*same like for java project.*
+*Same like for java project.*
 
 Done in class `password_util.php`
+
 
 ## Step 4: Create test cases
 
@@ -71,8 +75,7 @@ Done in class `password_util.php`
 **TODO, i'm on it...**
 
 
-
-## DOCS:
+## References:
 
 * https://wiki.php.net/rfc/argon2_password_hash
 * https://framework.zend.com/blog/2017-08-17-php72-argon2-hash-password.html
