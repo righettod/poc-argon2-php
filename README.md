@@ -63,21 +63,21 @@ sudo make install
 ```
 
 
-## Step 3: Install project dependencies and execute unit test
+## Step 3: Install project dependencies and execute unit tests
 ```
 composer install
 vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --verbose
 ```
 
 
-## Step 3: Create a utility functions
+## Step 4: Create a utility functions
 
 *Same like for java project.*
 
 Done in class `password_util.php`
 
 
-## Step 4: Create test cases
+## Step 5: Create test cases
 
 *Same like for java project.*
 
