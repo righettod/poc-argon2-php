@@ -31,6 +31,7 @@ The 3rd party linux repo `ondrej/php` provide pre-compiled packages for Argon2 a
 
 Apparently even on Ubuntu 16, PHP 7.0 is the provided version so manual install is required or using `ondrej/php` repository
 
+# Global setup
 
 ## Step 0: Install system dependencies
 
@@ -39,7 +40,7 @@ sudo apt-get install gcc clang libxml2-dev unzip wget curl make openssl libssl-d
 ```
 
 
-### Step 1: Install Argon2 from PHC release on Github repository and PHP 7.2 from sources with Argon2 option enabled
+## Step 1: Install Argon2 from PHC release on Github repository and PHP 7.2 from sources with Argon2 option enabled
 
 The following PHP compilation options are needed by Composer and PHPUnit and not for Argon2:
 * `--with-openssl`
@@ -52,14 +53,14 @@ The following PHP compilation options are needed by Composer and PHPUnit and not
 See this complete setup shell [script](setup-php-with-argon2ri.sh).
 
 
-## Step 2: Install project dependencies and execute unit tests
+## Step 2: Install project dependencies and execute unit tests to validate the setup
 ```
 composer install
 /usr/local/bin/php vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --testdox
 ```
 
 
-## References:
+# References:
 
 * https://wiki.php.net/rfc/argon2_password_hash
 * https://framework.zend.com/blog/2017-08-17-php72-argon2-hash-password.html
