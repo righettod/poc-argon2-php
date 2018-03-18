@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 7.2.3
+
+sudo: enabled
+
+os:
+  - linux
+
+before_install:
+  - sudo apt-get update -q
+  - sudo apt-get purge php.*
+  - sudo apt-get install gcc clang libxml2-dev unzip wget curl make openssl libssl-dev -y
+
+install:
+  - chmod +x setup-php-with-argon2ri.sh
+  - ./setup-php-with-argon2ri.sh
+  - composer install
+
+script:
+  - ./vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --verbose

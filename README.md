@@ -28,7 +28,7 @@ Apparently even on Ubuntu 16, PHP 7.0 is the provided version so manual install 
 ## Step 0: Install system dependencies
 
 ```
-sudo apt-get install gcc libxml2-dev unzip wget curl make openssl libssl-dev
+sudo apt-get install gcc clang libxml2-dev unzip wget curl make openssl libssl-dev
 ```
 
 
@@ -37,7 +37,7 @@ sudo apt-get install gcc libxml2-dev unzip wget curl make openssl libssl-dev
 ```
 wget https://github.com/P-H-C/phc-winner-argon2/archive/20171227.zip
 unzip 20171227.zip
-phc-winner-argon2-20171227
+cd phc-winner-argon2-20171227
 sudo make uninstall
 make
 make test
@@ -45,7 +45,7 @@ sudo make install
 ```
 
 
-## Step 2: Install PHP7.2 from sources with Argon2 option enabled
+## Step 2: Install PHP 7.2 from sources with Argon2 option enabled
 
 Options `--with-openssl --enable-mbstring --enable-dom --enable-json --enable-xml --enable-libxml` are needed by Composer and PHPUnit.
 
