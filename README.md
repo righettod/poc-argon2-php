@@ -47,17 +47,26 @@ sudo make install
 
 ## Step 2: Install PHP7.2 from sources with Argon2 option enabled
 
+Options `--with-openssl --enable-mbstring --enable-dom --enable-json --enable-xml --enable-libxml` are needed by Composer and PHPUnit.
+
 ```
 wget http://de2.php.net/get/php-7.2.3.tar.gz/from/this/mirror
 mv mirror mirror.tgz
 tar xf mirror.tgz
 cd php-7.2.3
-./configure --with-password-argon2=/usr/lib --with-openssl
+./configure --with-password-argon2=/usr/lib --with-openssl --enable-mbstring --enable-dom --enable-json --enable-xml --enable-libxml
 sudo make clean
 sudo make distclean
 make
 make test
 sudo make install
+```
+
+
+## Step 3: Install project dependencies and execute unit test
+```
+composer install
+vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --verbose
 ```
 
 
@@ -72,7 +81,7 @@ Done in class `password_util.php`
 
 *Same like for java project.*
 
-**TODO, i'm on it...**
+Done in class `password_util_testcase.php`
 
 
 ## References:

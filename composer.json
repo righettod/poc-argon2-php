@@ -1,0 +1,15 @@
+{
+    "name": "lab/poc-argon2-php",
+    "description": "Propose a example of secure usage/integration of the Argon2 algorithm in PHP application",
+    "type": "project",
+    "license": "GNU GPL v3",
+    "authors": [
+        {
+            "name": "righettod",
+            "email": "dominique.righetto@gmail.com"
+        }
+    ],
+    "require": {
+	"phpunit/phpunit": "7.0.2"
+	}
+}
