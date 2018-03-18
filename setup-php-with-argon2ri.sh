@@ -1,11 +1,12 @@
 #!/bin/sh
 export CDIR=`pwd`
-echo "Install Argon2 from PHC release on Github repository..."
+echo "#### Install Argon2 from PHC release on Github repository ####"
 cd $CDIR
 RELEASE_NAME=20171227
 wget https://github.com/P-H-C/phc-winner-argon2/archive/$RELEASE_NAME.zip
 unzip $RELEASE_NAME.zip
 cd phc-winner-argon2-$RELEASE_NAME
+sudo make uninstall
 make clean
 make
 make test > tests-argon2-library.txt
@@ -14,7 +15,9 @@ if [ "$TESTS_CONTAINS_ERROR" != "0" ]
 then
     exit 1
 fi
-echo "Install PHP 7.2 from sources with Argon2 option enabled..."
+sudo make install
+ls -l /usr/lib/*argon2*
+echo "#### Install PHP 7.2 from sources with Argon2 option enabled ####"
 cd $CDIR
 wget http://de2.php.net/get/php-7.2.3.tar.gz/from/this/mirror
 mv mirror mirror.tgz
