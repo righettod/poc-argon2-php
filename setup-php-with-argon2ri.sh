@@ -6,8 +6,6 @@ RELEASE_NAME=20171227
 wget https://github.com/P-H-C/phc-winner-argon2/archive/$RELEASE_NAME.zip
 unzip $RELEASE_NAME.zip
 cd phc-winner-argon2-$RELEASE_NAME
-sudo make uninstall
-make clean
 make
 make test > tests-argon2-library.txt
 TESTS_CONTAINS_ERROR=`grep -c FAIL tests-argon2-library.txt`
@@ -24,8 +22,6 @@ mv mirror mirror.tgz
 tar xf mirror.tgz
 cd php-7.2.3
 ./configure --with-password-argon2=/usr/lib --with-openssl --enable-mbstring --enable-dom --enable-json --enable-xml --enable-libxml
-sudo make clean
-sudo make distclean
 make
 make test
 sudo make install
