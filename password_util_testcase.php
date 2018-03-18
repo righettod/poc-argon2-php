@@ -31,10 +31,10 @@ class PasswordUtilTest extends TestCase
      * Test to validate that the verification of a password's hash is functional when password match is expected:
      * - Hash is verified and return true
      */
-    public function testHashCorrectVerificationCaseOK()
+    public function testHashCorrectVerificationCaseOk()
     {
         $p = new PUtil();
-        $password = "testHashCorrectVerificationCaseOK";
+        $password = "testHashCorrectVerificationCaseOk";
         $hash = $p->hash($password);
         $isValid = password_verify($password, $hash);
         $this->assertTrue($isValid, "Hash must match passed password");
@@ -44,10 +44,10 @@ class PasswordUtilTest extends TestCase
     * Test to validate that the verification of a password's hash is functional when password match is not expected:
     * - Hash is verified and return false
      */
-    public function testHashCorrectVerificationCaseKO()
+    public function testHashCorrectVerificationCaseKo()
     {
         $p = new PUtil();
-        $password = "testHashCorrectVerificationCaseKO";
+        $password = "testHashCorrectVerificationCaseKo";
         $hash = $p->hash($password);
         $isValid = password_verify("testBadPassword", $hash);
         $this->assertFalse($isValid, "Hash must not match passed password");

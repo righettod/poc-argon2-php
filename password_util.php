@@ -13,12 +13,12 @@ namespace Eu\Righettod\Pocargon2;
  */
 class PasswordUtil
 {
-  /**
-     * Compute a hash of a password.
-     *
-     * @param string $password Password to hash.
-     * @return string The hash in format "$argon2i$v=19$m=1024,t=2,p=2$amRwcjA5ZUlUZDdDNEJHRg$B6K1JOhuh2IyEsDrGFZHrmD+118gtj1tKt1V1n2ftus"
-     */
+    /**
+       * Compute a hash of a password.
+       *
+       * @param string $password Password to hash.
+       * @return string The hash in format "$argon2i$v=19$m=1024,t=2,p=2$amRwcjA5ZUlUZDdDNEJHRg$B6K1JOhuh2IyEsDrGFZHrmD+118gtj1tKt1V1n2ftus"
+       */
     public static function hash($password)
     {
         //Create options

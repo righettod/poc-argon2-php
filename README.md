@@ -1,4 +1,4 @@
-## Introduction
+# Introduction
 
 This project is a prototype in order to materialize concepts described in the following OWASP cheatsheet, in *Leverage an adaptive one-way function* section in PHP technology:
 
@@ -11,12 +11,19 @@ The objective is to propose a example of secure usage/integration of the **Argon
 
 It's the sibling project of this project : https://github.com/righettod/poc-argon2
 
-This POC is under heavy work in progress...
+# Configuration options
 
+Argon2 options used are defined [here](config.ini).
 
-## Notes
+# Argon2 library integration within an PHP setup
 
-Focus on non-installing binaries from untrusted sources (non official linux repos - PHC Github repo for Argon2 is considered as trusted)
+[![Build Status](https://travis-ci.org/righettod/poc-argon2-php.svg?branch=master)](https://travis-ci.org/righettod/poc-argon2-php)
+
+The TravisCI integration file **.travis.yml** show an example of integration of PHP setup with the Argon2 library and execution of unit tests to validate the setup.
+
+# Notes
+
+Focus on non-installing binaries from untrusted sources (non official linux repositories - PHC Github repo for Argon2 is considered as trusted because sources are provided and a security code review can be applied)
 
 I have used Ubuntu 14 in order to test proposed configuration strenght capacities on TravisCI cloud environments.
 
@@ -48,7 +55,7 @@ See this complete setup shell [script](setup-php-with-argon2ri.sh).
 ## Step 2: Install project dependencies and execute unit tests
 ```
 composer install
-vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --verbose
+/usr/local/bin/php vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --testdox
 ```
 
 

@@ -1,0 +1,161 @@
+= Argon2 usage proposal in PHP =
+
+The objective is to propose a example of secure usage/integration of the Argon2 algorithm in PHP application to protect password when stored.
+
+From PHP version 7.2, [https://wiki.php.net/rfc/argon2_password_hash Argon2 is supported] in built-in password hashing related functions:
+* '''password_hash()'''
+* '''password_verify()'''
+* '''password_get_info()'''
+
+Like for the Java proposal, the Argon2 implementation provided by [https://github.com/P-H-C/phc-winner-argon2 phc-winner-argon2] project has been used and for the same reasons.
+
+== Remark about self compilation of binaires for PHP and Argon2 ==
+
+Like for Java proposal, focus is made here on non-installing binaries from untrusted sources (non official linux repositories - PHC Github repository for Argon2 is considered as trusted because sources are provided and a security code review can be applied).
+
+The third-party linux repository '''[https://launchpad.net/~ondrej/+archive/ubuntu/php ondrej/php]''' provide pre-compiled packages for Argon2 and PHP 7.2 but it have been decided to not trust it because is not an official repository.
+
+== Implementation proposal ==
+
+=== Setup PHP for Argon2 usage ===
+
+The following shell script show a proposal for the setup of a PHP 7.2 installation to enable the usage of Argon2 for password hashing:
+
+<syntaxhighlight lang="python">
+
+  #!/bin/sh
+  export CDIR=`pwd`
+  ARGON2_RELEASE_NAME=20171227
+  PHP_RELEASE_NAME=7.2.3
+  echo "#### Install Argon2 from PHC release on Github repository ####"
+  cd $CDIR
+  wget https://github.com/P-H-C/phc-winner-argon2/archive/$ARGON2_RELEASE_NAME.zip
+  unzip $ARGON2_RELEASE_NAME.zip
+  cd phc-winner-argon2-$ARGON2_RELEASE_NAME
+  make
+  make test > tests-argon2-library.txt
+  TESTS_CONTAINS_ERROR=`grep -c FAIL tests-argon2-library.txt`
+  if [ "$TESTS_CONTAINS_ERROR" != "0" ]
+  then
+      exit 1
+  fi
+  sudo make install
+  echo "#### Install PHP 7.2 from sources with Argon2 option enabled ####"
+  cd $CDIR
+  wget http://de2.php.net/get/php-$PHP_RELEASE_NAME.tar.gz/from/this/mirror
+  mv mirror mirror.tgz
+  tar xf mirror.tgz
+  cd php-$PHP_RELEASE_NAME
+  ./configure --with-password-argon2=/usr/lib
+  make
+  make test
+  sudo make install
+  echo "#### Cleanup temporary stuff ####"
+  cd $CDIR
+  rm $ARGON2_RELEASE_NAME.zip
+  rm -rf phc-winner-argon2-$ARGON2_RELEASE_NAME
+  rm mirror.tgz
+  rm -rf php-$PHP_RELEASE_NAME
+
+</syntaxhighlight>
+
+=== Password hashing usage ===
+
+The following class propose utility methods to compute and verify a hash of a password along creating a abstraction layer on the algorithm used behind the scene.
+
+Like for Java proposal, this class can be included in a internal shared utility library that will be used others projects.
+
+<syntaxhighlight lang="php">
+
+  /**
+   * This class provided utility methods to create and verify a hash of a password.
+   *
+   * This implementation can be used to create a company internal shared php utility library that abstract application to know algorithm used and how to use it.
+   *
+   * As hash will be used for password type of information then the variant named "Argon2i" of Argon2 will be used.
+   *
+   * The hash creation method return a hash with all information in order to allow the application that need to verify the hash to be in a full stateless mode.
+   */
+  class PasswordUtil
+  {
+      /**
+         * Compute a hash of a password.
+         *
+         * @param string $password Password to hash.
+         * @return string The hash in format "$argon2i$v=19$m=1024,t=2,p=2$amRwcjA5ZUlUZDdDNEJHRg$B6K1JOhuh2IyEsDrGFZHrmD+118gtj1tKt1V1n2ftus"
+         */
+      public static function hash($password)
+      {
+          //Create options
+          $options = self::loadParameters();
+          //Compute the hash and return it
+          return password_hash($password, PASSWORD_ARGON2I, $options);
+      }
+
+
+      /**
+          * Verifies a password against a hash
+          * Password provided is wiped at the end of this method
+          *
+          * @param string $password Password to which hash must be verified against.
+          * @param string $hash Hash to verify.
+          * @return bool True if the password matches the hash, False otherwise.
+          */
+      public static function verify($password, $hash)
+      {
+          //Apply the verification (hash computation options are included in the hash itself) and return the result
+          return password_verify($password, $hash);
+      }
+
+
+      /**
+       * Load Argon2 options to use for hashing.
+       *
+       * @return array A associative array with the options.
+       */
+      private static function loadParameters()
+      {
+          //Parse configuration file
+          $options_array = parse_ini_file("config.ini");
+          $memory = intval($options_array["MEMORY"]);
+          $timeCost = intval($options_array["ITERATIONS"]);
+          $parallelism = intval($options_array["PARALLELISM"]);
+          if ($memory <= 0 || $timeCost <= 0 || $parallelism <= 0) {
+              throw new Exception("One or more of the hashing configuration parameters are not valid values !");
+          }
+          //Create the options final arrays and return it
+          return ["memory_cost" => $memory, "time_cost" => $timeCost, "threads" => $parallelism];
+      }
+  }
+
+</syntaxhighlight>
+
+Proposed configuration options for Argon2 are based on the same sources than for the Java proposal.
+
+Documented configuration is the following:
+
+<syntaxhighlight lang="python" highlight="15,17,19">
+  ; Configuration to define Argon2 options: DO NOT STORE THIS FILE IN THE WEB FOLDER !!!
+  ; See https://github.com/P-H-C/phc-winner-argon2#command-line-utility
+  ; See https://github.com/P-H-C/phc-winner-argon2/issues/59
+  ;
+  ; Number of iterations, here adapted to take at least 2 seconds
+  ; Tested on the following environments:
+  ;   ENV NUMBER 1: VMWARE VIRTUAL MACHINE - 30 Iterations is enough to reach 2 seconds processing time
+  ;       CPU: Intel Core i7-2670QM 2.20 GHz with 2 CPU
+  ;       RAM: 2GB
+  ;       OS: Ubuntu 14 64 bits
+  ;   ENV NUMBER 2: TRAVIS CI LINUX VM - 30 Iterations is also enough to reach 2 seconds processing time
+  ;       See details on https://docs.travis-ci.com/user/reference/overview/#Virtualisation-Environment-vs-Operating-System
+  ;       "Ubuntu Trusty" using infrastructure "Virtual machine on GCE" were used (GCE = Google Compute Engine)
+  [main]
+  ITERATIONS=30
+  ; The memory usage of 2^N KiB, here set to recommended value from Issue n°9 of PHC project (128 MB)
+  MEMORY=128000
+  ; Parallelism to N threads here set to recommended value from Issue n°9 of PHC project
+  PARALLELISM=4
+</syntaxhighlight>
+
+== Sources of the prototype ==
+
+The entire source code of the POC is available [https://github.com/righettod/poc-argon2-php here].
