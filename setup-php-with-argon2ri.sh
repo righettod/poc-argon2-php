@@ -26,3 +26,10 @@ cd php-$PHP_RELEASE_NAME
 make
 # make test
 sudo make install
+echo "#### Cleanup temporary stuff ####"
+cd $CDIR
+rm $ARGON2_RELEASE_NAME.zip
+rm -rf phc-winner-argon2-$ARGON2_RELEASE_NAME
+rm mirror.tgz
+rm -rf php-$PHP_RELEASE_NAME
+ls -l

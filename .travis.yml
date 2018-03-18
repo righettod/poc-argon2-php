@@ -20,4 +20,4 @@ install:
 
 script:
   - /usr/local/bin/php --version
-  - /usr/local/bin/php vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --verbose
+  - /usr/local/bin/php vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --testdox

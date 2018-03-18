@@ -18,9 +18,9 @@ This POC is under heavy work in progress...
 
 Focus on non-installing binaries from untrusted sources (non official linux repos - PHC Github repo for Argon2 is considered as trusted)
 
-I have used Ubuntu 14 in order to test proposed configuration strengh capacities on TravisCI cloud environments.
+I have used Ubuntu 14 in order to test proposed configuration strenght capacities on TravisCI cloud environments.
 
-The 3rd party linux repo `ondrej/php` provide pre-compiled packages for Argon2 and PHP7.2 but I have decided to not trust it because is not an official repository.
+The 3rd party linux repo `ondrej/php` provide pre-compiled packages for Argon2 and PHP 7.2 but I have decided to not trust it because is not an official repository.
 
 Apparently even on Ubuntu 16, PHP 7.0 is the provided version so manual install is required or using `ondrej/php` repository
 
@@ -32,22 +32,9 @@ sudo apt-get install gcc clang libxml2-dev unzip wget curl make openssl libssl-d
 ```
 
 
-## Step 1: Install Argon2 from PHC release on Github repository
+### Step 1: Install Argon2 from PHC release on Github repository and PHP 7.2 from sources with Argon2 option enabled
 
-```
-wget https://github.com/P-H-C/phc-winner-argon2/archive/20171227.zip
-unzip 20171227.zip
-cd phc-winner-argon2-20171227
-sudo make uninstall
-make
-make test
-sudo make install
-```
-
-
-## Step 2: Install PHP 7.2 from sources with Argon2 option enabled
-
-The following options are needed by Composer and PHPUnit:
+The following PHP compilation options are needed by Composer and PHPUnit and not for Argon2:
 * `--with-openssl`
 * `--enable-mbstring`
 * `--enable-dom`
@@ -55,39 +42,14 @@ The following options are needed by Composer and PHPUnit:
 * `--enable-xml`
 * `--enable-libxml`
 
-```
-wget http://de2.php.net/get/php-7.2.3.tar.gz/from/this/mirror
-mv mirror mirror.tgz
-tar xf mirror.tgz
-cd php-7.2.3
-./configure --with-password-argon2=/usr/lib --with-openssl --enable-mbstring --enable-dom --enable-json --enable-xml --enable-libxml
-sudo make clean
-sudo make distclean
-make
-make test
-sudo make install
-```
+See this complete setup shell [script](setup-php-with-argon2ri.sh).
 
 
-## Step 3: Install project dependencies and execute unit tests
+## Step 2: Install project dependencies and execute unit tests
 ```
 composer install
 vendor/phpunit/phpunit/phpunit password_util_testcase.php --colors=always --verbose
 ```
-
-
-## Step 4: Create a utility functions
-
-*Same like for java project.*
-
-Done in class `password_util.php`
-
-
-## Step 5: Create test cases
-
-*Same like for java project.*
-
-Done in class `password_util_testcase.php`
 
 
 ## References:
