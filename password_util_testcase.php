@@ -66,4 +66,19 @@ class PasswordUtilTest extends TestCase
         $failMsg = "Duration must be >= to 2 seconds and the current result is " . $timeElapsedInSeconds . " seconds";
         $this->assertTrue($timeElapsedInSeconds >= 2, $failMsg);
     }
+
+    /**
+    * Test that the password function can handle very big string
+    */
+    public function testVeryBigPassword(){
+      $p = new PUtil();
+      $password = str_repeat("X", 10000000);
+      $start = microtime(true);
+      $hash = $p->hash($password);
+      $timeElapsedInSeconds = microtime(true) - $start;
+      $isValid = password_verify($password, $hash);
+      $this->assertTrue($isValid, "Hash must match passed password");
+      $failMsg = "Duration must be >= to 2 seconds and the current result is " . $timeElapsedInSeconds . " seconds";
+      $this->assertTrue($timeElapsedInSeconds >= 2, $failMsg);
+    }
 }
