@@ -47,7 +47,13 @@ sudo make install
 
 ## Step 2: Install PHP 7.2 from sources with Argon2 option enabled
 
-Options `--with-openssl --enable-mbstring --enable-dom --enable-json --enable-xml --enable-libxml` are needed by Composer and PHPUnit.
+The following options are needed by Composer and PHPUnit:
+* `--with-openssl`
+* `--enable-mbstring`
+* `--enable-dom`
+* `--enable-json`
+* `--enable-xml`
+* `--enable-libxml`
 
 ```
 wget http://de2.php.net/get/php-7.2.3.tar.gz/from/this/mirror
